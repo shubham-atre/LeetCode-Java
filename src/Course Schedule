@@ -1,0 +1,126 @@
+//BFS using set size as indegree
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+     
+        if(numCourses <= 1) return true;
+        if(prerequisites==null || prerequisites.length==0) return true;
+        
+        Set[] graph = new Set[numCourses];
+        
+        for(int i=0; i<numCourses; i++)
+            graph[i]=new HashSet<Integer>();
+        
+        for(int i=0; i<prerequisites.length; i++)
+        {
+            graph[prerequisites[i][0]].add(prerequisites[i][1]);
+        }
+        
+        Queue<Integer> dq = new LinkedList<>();
+        int count=0;
+        
+        for(int i=0; i< graph.length; i++)
+        {
+            if(graph[i].size()==0)
+            {
+                dq.add(i);
+                count++;
+            }
+        }
+        
+        while(!dq.isEmpty())
+        {
+            int visited = dq.poll();
+            
+            for(int i=0; i<graph.length; i++)
+            {
+                Set node = graph[i];
+                if(node.contains(visited))
+                {
+                    node.remove(visited);
+                    if(node.size()==0)
+                    {
+                        count++;
+                        dq.add(i);
+                    }
+                }
+            }
+        }
+        
+        return count==numCourses;
+    }
+}
+
+//BFS using indegreeO(V^2) and O(V) space
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        ArrayList[] graph = new ArrayList[numCourses];
+        int[] degree = new int[numCourses];
+        Queue queue = new LinkedList();
+        int count=0;
+        
+        for(int i=0;i<numCourses;i++)
+            graph[i] = new ArrayList();
+            
+        for(int i=0; i<prerequisites.length;i++){
+            degree[prerequisites[i][1]]++;
+            graph[prerequisites[i][0]].add(prerequisites[i][1]);
+        }
+        for(int i=0; i<degree.length;i++){
+            if(degree[i] == 0){
+                queue.add(i);
+                count++;
+            }
+        }
+        
+        while(queue.size() != 0){
+            int course = (int)queue.poll();
+            for(int i=0; i<graph[course].size();i++){
+                int pointer = (int)graph[course].get(i);
+                degree[pointer]--;
+                if(degree[pointer] == 0){
+                    queue.add(pointer);
+                    count++;
+                }
+            }
+        }
+        if(count == numCourses)
+            return true;
+        else    
+            return false;
+    }
+}
+
+
+//DFS O(V)
+public class Solution {
+        public boolean canFinish(int numCourses, int[][] prerequisites) {
+            ArrayList[] graph = new ArrayList[numCourses];
+            for(int i=0;i<numCourses;i++)
+                graph[i] = new ArrayList();
+                
+            boolean[] visited = new boolean[numCourses];
+            for(int i=0; i<prerequisites.length;i++){
+                graph[prerequisites[i][1]].add(prerequisites[i][0]);
+            }
+
+            for(int i=0; i<numCourses; i++){
+                if(!dfs(graph,visited,i))
+                    return false;
+            }
+            return true;
+        }
+
+        private boolean dfs(ArrayList[] graph, boolean[] visited, int course){
+            if(visited[course])
+                return false;
+            else
+                visited[course] = true;;
+
+            for(int i=0; i<graph[course].size();i++){
+                if(!dfs(graph,visited,(int)graph[course].get(i)))
+                    return false;
+            }
+            visited[course] = false;
+            return true;
+        }
+    }
