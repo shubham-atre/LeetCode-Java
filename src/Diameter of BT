@@ -1,0 +1,61 @@
+//O(N) DFS Recursive, O(h) space if we count recursive fxn call stack
+class Solution {
+    int diameter = 0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        findNodeDepth(root);
+        return diameter;
+    }
+
+    private int findNodeDepth(TreeNode root) {
+        if (root == null) return 0;
+
+        int left = findNodeDepth(root.left);
+        int right = findNodeDepth(root.right);
+        diameter = Math.max(diameter, left + right);
+        return Math.max(left, right) + 1;
+    }
+}
+
+
+/*
+The idea is to use PostOrder traversal which to ensure the availability of the node until its left and right sub-trees are processed.
+For this reason, we use peek() method to keep the node on the stack until its left and right sub-trees gets processed.
+Then for each node, find the maximum-depth of the left and right sub-trees. Using this maximum-depth, we update diameter if required.
+Time complexity : O(n) - since every node in the tree is visited
+Space complexity : O(n) - space required for the HashMap and Stack
+*/
+class Solution
+{
+	public int diameterOfBinaryTree(TreeNode root)
+	{
+		Map<TreeNode, Integer> map = new HashMap<>();
+		Deque<TreeNode> stack = new ArrayDeque<>();
+        int diameter = 0;
+
+		if(root != null)
+			stack.push(root);
+
+		while(!stack.isEmpty())
+		{
+            TreeNode node = stack.peek();
+            
+			if(node.left != null && !map.containsKey(node.left))
+			{
+                stack.push(node.left);
+            }
+			else if(node.right != null && !map.containsKey(node.right))
+			{
+                stack.push(node.right);
+            }
+			else 
+			{
+                stack.pop();
+                int leftDepth = map.getOrDefault(node.left, 0);
+				int rightDepth = map.getOrDefault(node.right, 0);
+                map.put(node, 1 + Math.max(leftDepth, rightDepth));
+                diameter = Math.max(diameter, leftDepth + rightDepth);
+            }
+        }
+        return diameter;
+    }
+}
