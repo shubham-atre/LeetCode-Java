@@ -1,4 +1,4 @@
-//O(N) O(1) space interleaving
+//O(N) O(N) space using map
 /*
 // Definition for a Node.
 class Node {
