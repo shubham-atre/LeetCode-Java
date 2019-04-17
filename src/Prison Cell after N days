@@ -1,3 +1,4 @@
+//O(2^k) k is number of cells
 public int[] prisonAfterNDays(int[] cells, int N) {
         Map<String, Integer> seen = new HashMap<>();
         while (N > 0) {
