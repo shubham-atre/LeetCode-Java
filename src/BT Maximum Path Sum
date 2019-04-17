@@ -1,0 +1,27 @@
+//O(N)
+//max1 is the max value of the current node to pass to the upper level node.
+
+//max is the global max value that could be max1 or the sum of root and left max and right max
+public class Solution {
+
+int max=Integer.MIN_VALUE;
+
+public int maxPathSum(TreeNode root) {
+    maxPathSumR(root);
+    return max;
+}
+
+public int maxPathSumR(TreeNode root) {
+    
+    if(root==null) return 0;
+    int left=maxPathSumR(root.left);
+    int right=maxPathSumR(root.right);
+    
+    int max1 = Math.max(root.val,Math.max(root.val+left,root.val+right));
+    
+    //update max if more value can be achieved through this node
+    max = Math.max(max,Math.max(max1,left+right+root.val));
+    //max value for current path
+    return max1;
+}
+}
