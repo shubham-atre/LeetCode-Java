@@ -1,4 +1,4 @@
-//BFS using set size as indegree
+//BFS using size of set as indegree, O(V^2)
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
      
@@ -91,7 +91,7 @@ public class Solution {
 }
 
 
-//DFS O(V)
+//DFS O(V+E)
 public class Solution {
         public boolean canFinish(int numCourses, int[][] prerequisites) {
             ArrayList[] graph = new ArrayList[numCourses];
