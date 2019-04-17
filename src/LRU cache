@@ -1,0 +1,90 @@
+//O(1) put and get, O(n) space for hashmap
+class LRUCache {
+    class LinkedNode {
+        LinkedNode prev;
+        LinkedNode next;
+        int key;
+        int val;
+        
+        public LinkedNode(int key, int val) {
+            this.key = key;
+            this.val = val;
+        }
+    }
+    
+    int capacity;
+    Map<Integer, LinkedNode> keyToNode = new HashMap<Integer, LinkedNode>(); // elements in the cache
+    LinkedNode head = null; // The last recently used element
+    LinkedNode tail = null; // The least recently used element
+        
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+    
+    public int get(int key) {
+        if( keyToNode.containsKey(key) ) {
+            LinkedNode newFirst = keyToNode.get(key);
+            moveToHead(newFirst);
+            return newFirst.val;
+        }
+        else
+            return -1;
+    }
+    
+    private void moveToHead(LinkedNode newHead) {
+        if( newHead != head ) {
+            LinkedNode prev = newHead.prev;
+            LinkedNode next = newHead.next;
+            prev.next = next;
+            if( next != null )
+                next.prev = prev;
+            else
+                tail = prev;
+            newHead.prev = null;
+            newHead.next = head;
+            head.prev = newHead;
+            head = newHead;
+        }
+    }
+    
+    public void removeTail() {
+    	keyToNode.remove(tail.key);
+    	if( head == tail ) {
+    		head = null;
+    		tail = null;
+    	}
+    	else {
+    		LinkedNode prev = tail.prev;
+    		prev.next = null;
+    		tail.prev = null;
+    		tail = prev;
+    	}
+    }
+    
+    public void addNode(LinkedNode node) {
+    	keyToNode.put(node.key, node);
+    	if( keyToNode.size() == 1 ) {
+    		head = node;
+    		tail = node;
+    	}
+    	else {
+    		node.next = head;
+    		head.prev = node;
+    		head = node;
+    	}
+    }
+    
+    public void put(int key, int value) {
+    	LinkedNode node = keyToNode.get(key);
+    	if( node == null ) {
+    		if( theMap.size() == capacity )
+    			removeTail();
+    		node = new LinkedNode(key, value);
+    		addNode(node);
+    	}
+        else{
+            node.val = value;
+    	    moveToHead(node);    
+        }
+    }
+}
