@@ -77,7 +77,7 @@ class LRUCache {
     public void put(int key, int value) {
     	LinkedNode node = keyToNode.get(key);
     	if( node == null ) {
-    		if( theMap.size() == capacity )
+    		if( keyToNode.size() == capacity )
     			removeTail();
     		node = new LinkedNode(key, value);
     		addNode(node);
