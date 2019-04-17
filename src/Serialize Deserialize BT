@@ -1,0 +1,52 @@
+//DFS Preorder O(N) time and O(N) space, as entire tree is kept for both ops
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+        
+    }
+    
+    void serialize(TreeNode root, StringBuilder sb)
+    {
+        if(root==null)
+        {
+            sb.append("#,");
+            return;
+        }
+        else
+        {
+            sb.append(root.val);
+            sb.append(",");
+            serialize(root.left, sb);
+            serialize(root.right, sb);
+        }
+        
+        return;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        
+        Queue<String> list = new LinkedList<>(Arrays.asList(data.split(",")));
+        return deserialize(list);
+        
+    }
+    
+    TreeNode deserialize(Queue<String> data)
+    {
+        String q=data.poll();
+        if(q.equals("#"))
+        {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(q));
+        
+        root.left=deserialize(data);
+        root.right=deserialize(data);
+        return root;
+        
+    }
+}
