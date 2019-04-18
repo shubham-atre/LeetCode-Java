@@ -1,0 +1,65 @@
+//Detection O(N), O(1) space
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head == null || head.next == null)
+            return false;
+        ListNode slow = null;
+        ListNode fast = null;
+        slow = head;
+        fast = head.next;
+        while(slow!=fast){
+            if( fast == null || fast.next == null)
+                return false;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        return true;
+        
+    }
+}
+
+//Location O(N), O(1) space
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if(head == null)
+            return null;
+        ListNode intersection = intersect(head);
+        
+        if(intersection == null)
+            return null;
+        ListNode ptr1 = head;
+        ListNode ptr2 = intersection;
+        while(ptr1!=ptr2){
+            ptr1 = ptr1.next;
+            ptr2 = ptr2.next;
+        }
+        return ptr1;    
+    }
+    
+    public ListNode intersect(ListNode head){
+        ListNode fast = head;
+        
+        ListNode slow = head;
+        while(fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                return slow;
+            }
+            
+        }
+        return null;
+    }
+}
