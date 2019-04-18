@@ -1,0 +1,99 @@
+/*
+AutocompleteSystem() takes O(k*l)O(k∗l) time. We need to iterate over ll sentences each of average length kk,
+to create the trie for the given set of sentencessentences.
+
+input() takes O\big(p+q+mlog(m)\big)O(p+q+mlog(m)) time. Here,
+pp refers to the length of the sentence formed till now,
+cur_sencur s​	en. qq refers to the number of nodes in the trie considering the sentence formed till now as the root node. Again, we need to sort the listlist of length mm indicating the options available for the hot sentences, which takes O\big(mlog(m)\big)O(mlog(m)) time.
+*/
+class AutocompleteSystem {
+
+    private static class Trie {
+        public int time;
+        public boolean isWord;
+        public Map<Character, Trie> children;
+        public Trie() {
+            this.time = 0;
+            this.isWord = false;
+            this.children = new HashMap<>();
+        }
+    }
+    
+    private static class Pair<K, V> {
+        public K key;
+        public V value;
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+    
+    private Trie root;
+    
+    private StringBuilder current;
+    
+    public AutocompleteSystem(String[] sentences, int[] times) {
+        root = new Trie();
+        current = new StringBuilder();
+        for (int i = 0; i < sentences.length; i++) {
+            add(sentences[i], times[i]);
+        }
+    }
+    
+    public List<String> input(char c) {
+        if (c == '#') {
+            add(current.toString(), 1);
+            current.setLength(0);
+            return new LinkedList<>();
+        } else {
+            current.append(c);
+            return search(current.toString());
+        }
+    }
+    
+    private void add(String sentence, int time) {
+        Trie node = root;
+        for (int i = 0; i < sentence.length(); i++) {
+            char c = sentence.charAt(i);
+            if (!node.children.containsKey(c)) {
+                node.children.put(c, new Trie());
+            }
+            node = node.children.get(c);
+        }
+        node.isWord = true;
+        // should add instead of assign, because same word may be added twice
+        node.time += time;
+    }
+    
+    private List<String> search(String input) {
+        Trie node = root;
+        PriorityQueue<Pair<String, Integer>> pq = new PriorityQueue<>((a, b) -> {
+            if (b.value != a.value) return b.value - a.value;
+            return a.key.compareTo(b.key);
+        });
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (!node.children.containsKey(c)) return new LinkedList<>();
+            node = node.children.get(c);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(input); // prefix
+        addAll(pq, sb, node);
+        List<String> result = new LinkedList<>();
+        for (int i = 0; i < 3 && !pq.isEmpty(); i++) {
+            result.add(pq.poll().key);
+        }
+        return result;
+    }
+    
+    private void addAll(PriorityQueue<Pair<String, Integer>> pq, StringBuilder sb, Trie node) {
+        if (node == null) return;
+        if (node.isWord) pq.offer(new Pair<>(sb.toString(), node.time));
+        for (char key : node.children.keySet()) {
+            sb.append(key);
+            addAll(pq, sb, node.children.get(key));
+            sb.setLength(sb.length() - 1);
+        }
+    }
+    
+}
