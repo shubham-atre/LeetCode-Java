@@ -1,0 +1,41 @@
+//recurssive
+public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+        inorderTraversalHelper(root,result);
+        return result;
+    }
+    
+    public void inorderTraversalHelper(TreeNode root, List<Integer> result){
+        if(root!=null){
+            if(root.left!=null){
+                inorderTraversalHelper(root.left,result);
+            }
+            result.add(root.val);
+            
+            if(root.right!=null){
+                inorderTraversalHelper(root.right,result);
+            }
+        }
+    }
+    
+ //Iterative
+ public List<Integer> inorderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        List<Integer> list = new ArrayList<>();
+        while(curr!=null || !stack.isEmpty()){
+            while(curr!=null){
+                stack.push(curr);
+                curr = curr.left;
+            }
+            
+            curr = stack.pop();
+            list.add(curr.val);
+            
+            curr = curr.right;
+            
+        }
+        
+        return list;
+        
+    }
