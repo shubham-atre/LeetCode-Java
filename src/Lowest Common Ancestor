@@ -1,0 +1,40 @@
+ //O(N) time and O(N) space for both solutions, function call stack vs queue
+ // recursively 
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    if (root == null || root == p || root == q) {
+        return root;
+    }
+    TreeNode l = lowestCommonAncestor(root.left, p, q);
+    TreeNode r = lowestCommonAncestor(root.right, p, q);
+    return l != null && r != null?root : l == null?r: l;
+}
+}
+
+
+// iteratively 
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    Map<TreeNode, TreeNode> parent = new HashMap<>();
+    Queue<TreeNode> queue = new LinkedList<>();
+    parent.put(root, null);
+    queue.add(root);
+    while (!parent.containsKey(p) || !parent.containsKey(q)) {
+        TreeNode node = queue.poll();
+        if (node != null) {
+            parent.put(node.left, node);
+            parent.put(node.right, node);
+            queue.add(node.left);
+            queue.add(node.right);
+        }
+    }
+    Set<TreeNode> set = new HashSet<>();
+    while (p != null) {
+        set.add(p);
+        p = parent.get(p);
+    }
+    while (!set.contains(q)) {
+        q = parent.get(q);
+    }
+    return q;
+}
