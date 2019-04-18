@@ -1,0 +1,48 @@
+//recursive
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root == null)
+            return true;
+       return isSymmetricHelper(root.left,root.right);
+    }
+    
+    public boolean isSymmetricHelper(TreeNode left, TreeNode  right){
+        if(left ==null && right == null)
+            return true;
+        if(right == null || left == null)
+            return false;
+        
+        if(right.val == left.val){
+           return isSymmetricHelper(left.left,right.right) &&       isSymmetricHelper(left.right, right.left);
+        }else{
+            return false;
+        }
+    }
+}
+
+//iterative
+public boolean isSymmetric(TreeNode root) {
+        if(root==null) return true;
+        Stack<TreeNode> stack = new Stack<>();
+        if(!pushToStack(root.left, root.right, stack))
+            return false;
+        
+        while(!stack.isEmpty()){
+            TreeNode left = stack.pop();
+            TreeNode right = stack.pop();
+            if(!pushToStack(left.left, right.right, stack))
+                return false;
+            if(!pushToStack(left.right, right.left, stack))
+                return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean pushToStack(TreeNode n1, TreeNode n2, Stack<TreeNode> stack){
+        if(n1==null || n2==null) return n1==n2;
+        if(n1.val!=n2.val) return false;
+        stack.push(n1);
+        stack.push(n2);
+        return true;
+    }
