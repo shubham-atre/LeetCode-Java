@@ -19,3 +19,36 @@ public class Solution {
         
     }
 }
+
+
+//iterative
+public class Solution {
+    public Node connect(Node root) {
+        // 6:27pm - 6:35pm
+        // iterative, level-order traversal using queue
+        if (root == null) {
+            return root;
+        }
+        LinkedList<Node> queue = new LinkedList<Node>();
+        queue.offer(root);
+        while (queue.size() != 0) {
+            int size = queue.size();
+            Node prev = null;
+            for (int i = 0; i < size; i++) {
+                Node curr = queue.poll();
+                if (prev != null) {
+                    prev.next = curr;
+                }
+                prev = curr;
+                if (curr.left != null) {
+                    queue.offer(curr.left);
+                }
+                if (curr.right != null) {
+                    queue.offer(curr.right);
+                }
+            }
+            prev.next = null;
+        }
+    return root;
+    }
+}
