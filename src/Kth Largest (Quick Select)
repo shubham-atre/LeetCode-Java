@@ -1,0 +1,43 @@
+//O(n) avg
+public class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        int len = nums.length;
+        
+        return getK(0, len-1, k, nums);    
+    }
+    private int getK(int st, int end, int k, int[] ns){
+       int v = st + (int)(Math.random() * (end-st));
+       //System.out.println(v);
+       swap(v,end,ns);
+       int l=st, r=end, val = ns[end];
+       while(l<r){
+           while(l<r && ns[l]>val){
+               l++;
+           }
+           while(l<r && ns[r]<=val){
+               r--;
+           }
+           if(l==r){
+               break;
+           }
+           swap(l,r,ns);
+       }
+       
+       swap(l,end,ns);
+       if(l==k-1){
+           return ns[l];
+       }else if(l>k-1){
+           return getK(st, l-1, k, ns);
+       }else{
+           return getK(l+1, end, k, ns);
+       }
+      
+       
+    }
+    private void swap(int i, int j, int[] ns){
+        int a = ns[i];
+        ns[i] = ns[j];
+        ns[j] = a;
+    }
+    
+}
