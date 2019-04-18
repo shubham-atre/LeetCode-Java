@@ -1,0 +1,43 @@
+//sliding window , O(N*k)
+public class Solution {
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        int[] count = new int[256];
+        char[] cs = s.toCharArray();
+        int distinctNum = 0, leftI = 0, res = 0;
+        for (int rightI = 0; rightI < cs.length; rightI++) {
+            if (count[cs[rightI]]++ == 0) distinctNum++;
+            if (distinctNum > k) {
+                while (--count[cs[leftI++]] > 0);
+                distinctNum--;
+            }
+            res = Math.max(res, rightI - leftI + 1);
+        }
+        return res;
+    }
+}
+
+
+// linked hashmap, O(N)
+public int lengthOfLongestSubstringKDistinct(String s, int k) {
+    if (s == null || s.length() == 0 || k == 0) return 0;
+    
+    final Integer[] lastPos = new Integer[1];
+    Map<Character, Integer> map = new LinkedHashMap<Character, Integer>() {
+       protected boolean removeEldestEntry(Map.Entry<Character, Integer> eldest) {
+         lastPos[0] = eldest.getValue();
+         return size() > k;
+       }
+    };
+    int maxLen = 0;
+    for (int start = 0, end = 0, len = s.length(); end < len; end++) {
+      char c = s.charAt(end);
+      map.remove(c);
+      boolean willRemove = (map.size() == k);
+      map.put(c, end);
+      if (willRemove) {
+        start = lastPos[0] + 1;
+      }
+      maxLen = Math.max(maxLen, end - start + 1);
+    }
+    return maxLen;
+  }
