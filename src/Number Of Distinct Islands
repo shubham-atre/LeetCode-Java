@@ -1,0 +1,29 @@
+class Solution {
+    public int numDistinctIslands(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) return 0;
+        Set islands = new HashSet();
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c < grid[0].length; c++){
+                if (grid[r][c] == 1){
+                    StringBuilder path = new StringBuilder();
+                    dfs(grid, path, r, c, r, c);
+                    islands.add(path.toString());
+                    
+                }
+            }
+        }
+        return islands.size();
+    }
+    private void dfs(int[][] grid, StringBuilder path, int r, int c, int r0, int c0){
+        int nr = grid.length, nc = grid[0].length;
+        if (r < 0 || c < 0 || r >= nr || c >= nc || grid[r][c] == 0) return;
+        int hash = (r - r0) * nc + (c - c0);
+        path.append(hash);
+        // System.out.println(path.toString());
+        grid[r][c] = 0;
+        dfs(grid, path, r, c + 1, r0, c0);
+        dfs(grid, path, r + 1, c, r0, c0);
+        dfs(grid, path, r, c - 1, r0, c0);
+        dfs(grid, path, r - 1, c, r0, c0);
+    }
+}
