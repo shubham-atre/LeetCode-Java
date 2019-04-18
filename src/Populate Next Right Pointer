@@ -1,0 +1,21 @@
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        
+        if(root==null)
+            return;
+        
+        link(root, null, null);
+    }
+    
+    void link(TreeLinkNode root, TreeLinkNode right, TreeLinkNode root_right)
+    {
+        if(root==null)
+            return;
+        
+        root.next=right;
+        
+        link(root.left, root.right, root.right);
+        link(root.right, root_right==null?null:root_right.left, root_right==null?null:root_right.left);
+        
+    }
+}
