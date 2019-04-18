@@ -19,26 +19,23 @@ public boolean isValidBST(TreeNode root) {
     }
     
 //iterative
-  public boolean isValidBST(TreeNode root) 
-  {
-    Stack<TreeNode> stack = new Stack();
-    double inorder = - Double.MAX_VALUE;
-      
-    while(!stack.isEmpty() || root!=null)
-    {
-        while(root!=null)
-        {
+  // in-order traversal iteratively
+public boolean isValidBST(TreeNode root) {
+    Integer pre = null;
+    Stack<TreeNode> stack = new Stack<>();
+    while (true) {
+        while (root != null) {
             stack.push(root);
             root = root.left;
         }
-    
-      root = stack.pop();
-      
-      if(root.val<=inorder)
-          return false;
-      
-      inorder = root.val;
-      root = root.right;
+        if (stack.isEmpty()) {
+            return true;
+        }
+        TreeNode node = stack.pop();
+        if (pre != null && pre >= node.val) {
+            return false;
+        }
+        pre = node.val;
+        root = node.right;
     }
-      return true;
-  }
+}
