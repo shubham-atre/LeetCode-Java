@@ -1,0 +1,44 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
+
+class IntegerWrapper implements Comparable<IntegerWrapper> {
+    int row;
+    int colunm;
+    int value;
+
+    public IntegerWrapper(int row, int colunm, int value) {
+        this.row = row;
+        this.colunm = colunm;
+        this.value = value;
+    }
+
+    @Override
+    public int compareTo(IntegerWrapper o) {
+        return Integer.compare(this.value, o.value);
+    }
+}
+
+public class Solution {
+    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<int[]> answer = new LinkedList<>();
+        if (nums1.length > 0 && nums2.length > 0) {
+            int length = nums1.length;
+            PriorityQueue<IntegerWrapper> heap = new PriorityQueue<>(length);
+            for (int row = 0; row < length; row++) {
+                heap.add(new IntegerWrapper(row, 0, nums1[row] + nums2[0]));
+            }
+            while (k > 0 && heap.size() > 0) {
+                IntegerWrapper wrapper = heap.poll();
+                answer.add(new int[]{nums1[wrapper.row], nums2[wrapper.colunm]});
+                wrapper.colunm++;
+                if (wrapper.colunm < nums2.length) {
+                    wrapper.value = nums1[wrapper.row] + nums2[wrapper.colunm];
+                    heap.add(wrapper);
+                }
+                k--;
+            }
+        }
+        return answer;
+    }
+}
