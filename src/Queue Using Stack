@@ -1,0 +1,70 @@
+Stack s1;
+Stack s2;
+public MyQueue() {
+	s1 = new Stack();
+	s2 = new Stack();
+}
+
+public void push(int x) {
+	s1.push(x);
+}
+
+public int pop() {
+	peek();
+	return (int)s2.pop();
+}
+
+public int peek() {
+	if(s2.empty())
+		while(!s1.empty())
+			s2.push(s1.pop());
+	return (int)s2.peek();
+}
+
+public boolean empty() {
+	return s1.empty()&&s2.empty();
+}
+
+
+//one stack recurssion
+class MyQueue {
+    
+    private Stack<Integer> stack;
+
+    /** Initialize your data structure here. */
+    public MyQueue() {
+        stack = new Stack<>();
+    }
+    
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        stack.push(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    public int pop() {
+        if (stack.size() == 1) {
+            return stack.pop();
+        } 
+        int curVal = stack.pop();
+        int res = pop();
+        stack.push(curVal);
+        return res;
+    }
+    
+    /** Get the front element. */
+    public int peek() {
+        if (stack.size() == 1) {
+            return stack.peek();
+        } 
+        int curVal = stack.pop();
+        int res = peek();
+        stack.push(curVal);
+        return res;
+    }
+    
+    /** Returns whether the queue is empty. */
+    public boolean empty() {
+        return stack.isEmpty();
+    }
+}
