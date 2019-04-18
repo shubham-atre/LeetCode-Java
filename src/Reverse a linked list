@@ -1,0 +1,35 @@
+//iterative
+public ListNode reverseList(ListNode head) {
+        
+        if(head==null)
+            return head;
+        
+        ListNode next=null;
+        ListNode pre=null;
+        
+        while(head!=null) {
+            next=head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        
+        return pre;
+    }
+    
+//recursive
+public ListNode reverseList(ListNode head) {
+        
+        return reverse(null, head);
+        
+    }
+    
+    public ListNode reverse(ListNode cur, ListNode next)
+    {
+        if(next==null)
+            return cur;
+        
+        ListNode temp = next.next;
+        next.next = cur;
+        return reverse(next, temp);
+    }
