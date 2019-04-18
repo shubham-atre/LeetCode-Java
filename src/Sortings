@@ -1,0 +1,104 @@
+//Selection O(N2), brings minimum elelent to the begining
+ public static int[] selectionSort(int[] arr){
+ 
+ for (int i = 0; i < arr.length - 1; i++)
+ {
+ int index = i;
+ for (int j = i + 1; j < arr.length; j++)
+ if (arr[j] < arr[index]) 
+ index = j;
+ 
+ int smallerNumber = arr[index]; 
+ arr[index] = arr[i];
+ arr[i] = smallerNumber;
+ }
+ return arr;
+ }
+ 
+ //Insertion O(N2), swaps an element until all elements at it's left are smaller than it
+ public static int[] insertionSort(int arr[])
+	{
+		for (int i = 1; i < arr.length; i++) 
+		{ 
+			int valueToSort = arr[i];
+			int j; 
+			// If we get smaller value than valueToSort then , we stop at that index. 
+			for ( j = i; j > 0 && arr[j - 1] > valueToSort; j--) {
+				arr[j] = arr[j - 1];
+			}
+ 
+			// We will put valueToSort at that index
+			arr[j] = valueToSort;
+		}
+		return arr;
+	}
+  
+  //Bubble sort O(N2) heiviest elelment at the bottom
+  public static int[] bubbleSort(int arr[])
+ {
+  for (int i = 0; i < arr.length; i++) {
+   for (int j = 0; j < arr.length-1-i; j++) { 
+     if(arr[j]>arr[j+1])
+     {
+       int temp=arr[j];
+       arr[j]=arr[j+1];
+       arr[j+1]=temp;
+     }
+   }
+  }
+  return arr;
+ }
+ 
+ 
+ //Quick Sort O(n2) worst, O(nlogn) avg&best. Divide and conquer
+ public class Quicksort {
+    private int[] numbers;
+    private int number;
+
+    public void sort(int[] values) {
+        this.numbers = values;
+        number = values.length;
+        quicksort(0, number - 1);
+    }
+
+    private void quicksort(int low, int high) {
+        int i = low, j = high;
+        // Get the pivot element from the middle of the list
+        int pivot = numbers[(low + high) / 2];
+
+        // Divide into two lists
+        while (i <= j) {
+            // If the current value from the left list is smaller then the pivot
+            // element then get the next element from the left list
+            while (numbers[i] < pivot) {
+                i++;
+            }
+            // If the current value from the right list is larger then the pivot
+            // element then get the next element from the right list
+            while (numbers[j] > pivot) {
+                j--;
+            }
+
+            // If we have found a values in the left list which is larger then
+            // the pivot element and if we have found a value in the right list
+            // which is smaller then the pivot elment then we exchange the
+            // values.
+            if (i <= j) {
+                exchange(i, j);
+                i++;
+                j--;
+            }
+        }
+        // Recursion
+        if (low < j)
+            quicksort(low, j);
+        if (i < high)
+            quicksort(i, high);
+    }
+
+    private void exchange(int i, int j) {
+        int temp = numbers[i];
+        numbers[i] = numbers[j];
+        numbers[j] = temp;
+    }
+}
