@@ -1,0 +1,44 @@
+public boolean isValidBST(TreeNode root) {
+        if(root == null) return true;
+        return validateBSTHelper(root, null, null);
+    }
+    
+    public static boolean validateBSTHelper(TreeNode node, Integer lower_limit, Integer upper_limit){
+        if((lower_limit!= null) && (lower_limit >= node.val))
+            return false;
+        if((upper_limit!= null) && (upper_limit <= node.val))
+            return false;
+        
+        boolean left = node.left != null ? validateBSTHelper(node.left,lower_limit, node.val) : true;
+        if(left){
+            boolean right = node.right != null ? validateBSTHelper(node.right,node.val, upper_limit) : true;
+            return right;
+        }else{
+            return false;
+        }
+    }
+    
+//iterative
+  public boolean isValidBST(TreeNode root) 
+  {
+    Stack<TreeNode> stack = new Stack();
+    double inorder = - Double.MAX_VALUE;
+      
+    while(!stack.isEmpty() || root!=null)
+    {
+        while(root!=null)
+        {
+            stack.push(root);
+            root = root.left;
+        }
+    
+      root = stack.pop();
+      
+      if(root.val<=inorder)
+          return false;
+      
+      inorder = root.val;
+      root = root.right;
+    }
+      return true;
+  }
