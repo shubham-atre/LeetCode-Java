@@ -1,0 +1,59 @@
+//Level order traversal null insertion and deletion
+public int widthOfBinaryTree(TreeNode root) {
+        // Level Order Traversal
+        // Edge case
+        if(root == null) return 0;
+        
+        // Queue
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        // null only counted between end points
+        int max = 0;
+        while(!queue.isEmpty()) {
+            // Trim nulls in queue
+            while(!queue.isEmpty() && queue.getFirst() == null )    queue.removeFirst();
+            while(!queue.isEmpty() && queue.getLast() == null )    queue.removeLast();
+            max = Math.max(max, queue.size());
+            for(int sz = queue.size(); sz > 0; sz--) {
+                TreeNode temp = queue.poll();
+                if(temp == null) {
+                    queue.offer(null);
+                    queue.offer(null);
+                } else {
+                    queue.offer(temp.left);
+                    queue.offer(temp.right);
+                }
+                
+            }
+        }
+        return max;
+    }
+    
+    
+//Modify values of nodes to store position number of node(if tree was full BT)
+public int widthOfBinaryTree(TreeNode root) {
+        if (root == null) return 0;
+        int width = 0, start = 0, end = 0;
+        Deque<TreeNode> queue = new LinkedList<>();
+        root.val = 1;
+        queue.addFirst(root);
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            for (int i = 0; i < n; i++) {
+                TreeNode node = queue.removeLast();
+                end = (int)node.val;
+                if (i==0) start = end;
+                if (node.left != null) {
+                    node.left.val = 2 * (int)node.val - 1;
+                    queue.addFirst(node.left);
+                }
+                if (node.right != null) {
+                    node.right.val = 2 * (int)node.val;
+                    queue.addFirst(node.right);
+                }
+            }
+            width = Math.max(width, end-start+1);
+        }
+        return width;
+    }
+
