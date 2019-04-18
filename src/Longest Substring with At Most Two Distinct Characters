@@ -1,0 +1,36 @@
+//O(n) sliding window
+class Solution {
+    
+    // sliding windown + hashmap 
+    // use left right pointer to keep a window
+    // hashmap store the last occurance of a char
+    
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null || s.length() == 0) return 0;
+        if (s.length() <= 2) return s.length();
+        
+        Map<Character, Integer> map = new HashMap<>();
+        
+        int left = 0, right = 0;
+        int maxLen = 0;
+        while (right < s.length() ) {
+            char r = s.charAt(right);
+            
+            map.put(r, right);
+            
+            while (map.size() > 2) {
+                char l = s.charAt(left);
+                if (map.get(l) == left) {
+                    map.remove(l);
+                } 
+                left += 1;
+            } 
+            
+            maxLen = Math.max(maxLen, right - left + 1);
+            
+            right++;
+        }
+        
+        return maxLen;
+    }
+}
