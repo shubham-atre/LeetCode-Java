@@ -1,0 +1,22 @@
+//O(n)
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        char[] ch  = s.toCharArray();
+        Map<Character, Integer> map = new HashMap<>();
+        int ans =0;
+        
+        for(int i=0, j=0;j<s.length(); j++) {
+            
+            if(map.containsKey(ch[j]))
+            {
+              //skip to the index next to the last index of character
+                i = Math.max(i, map.get(ch[j]));
+            }
+            map.put(ch[j], j+1);
+                ans = Math.max(ans, j-i+1);
+           
+        }
+        
+        return ans;
+    }
+}
