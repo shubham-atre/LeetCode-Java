@@ -22,3 +22,26 @@ public int calculate(String s) {
     
     return pre + sign * curr;
 }
+
+
+/*
+*However for the current problem, we only have two precedence levels, lower level with '+' & '-' operations and higher level with '*' & '/' operations. So the stack can be replaced by two variables, one for the lower level and the other for the higher level. Note that when we are done with a partial expression involving '/' & '*' operations only, the result will fall back to the lower level.
+
+Now let's look at each level separately.
+
+First of course we will have a variable "num" to represent the current number involved in the operations.
+
+For the lower level, we use a variable "pre" to denote the partial result. And as usual we will have a variable "sign" to indicate the sign of the incoming result.
+
+For the higher level, we use a variable "curr" to represent the partial result, and another variable "op" to indicate what operation should be performed:
+
+If op = 0, no '*' or '/' operation is needed and we simply assign num to curr;
+if op = 1, we perform multiplication: curr = curr * num;
+if op = -1, we perform division: curr = curr / num.
+The key now is to figure out what to do depending on the scanned character from string s. There are three cases:
+
+A digit is hit: As usual we will update the variable "num". One more step here is that we need to determine if this is the last digit of the current number. If so, we need to perform the corresponding operation depending on the value of "op" and update the value of "curr" (It is assumed that we are at the higher precedence level by default);
+A ' * ' or '/' is hit: We need to update the value of "op" and reset "num" to 0;
+A '+' or '-' is hit: Current higher precedence level is over, so the partial result (which is denoted by "curr") will fall back to the lower level and can be incorporated into the lower level partial result "pre". And of course we need to update the "sign" as well as reset "op" and "num" to 0.
+One last point is that the string will end with digit or space, so we need to add the result for the last partial higher level expression to "pre". Here is the Java program.
+*/
