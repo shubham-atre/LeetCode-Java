@@ -1,0 +1,37 @@
+public class Solution { //union-find eager union, union by rank, path compression 3ms
+    private int[] root, rank;
+    private int count;
+    private int find(int x) {
+        int i = x;
+        while (root[i] != i)
+            i = root[i];
+        int result = i, tmp;
+        while (i != result) {   //path compression
+            tmp = root[i];
+            root[i] = result;
+            i = tmp;
+        }
+        return result;
+    }
+    private void union(int x, int y) {
+        int rx = find(x), ry = find(y);
+        if (rx == ry) return;
+        count--;
+        if (rank[rx] >= rank[ry]) {
+            root[ry] = rx;
+            if (rank[rx] == rank[ry]) rank[rx]++;   //only when two cc has same rank we increase the rank of new one
+        } else root[rx] = ry;
+    }
+    public int countComponents(int n, int[][] edges) {
+        count = n;
+        root = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) {
+            root[i] = i;
+            rank[i] = 1;
+        }
+        for (int[] e : edges)
+            union(e[0], e[1]);
+        return count;
+    }
+}
